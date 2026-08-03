@@ -1,0 +1,18 @@
+# Gradle and Minecraft development output
+.gradle/
+build/
+run/
+
+# Local logs
+*.log
+*.out.log
+*.err.log
+
+# Local template/archive files
+*.zip
+
+# IDE and operating-system files
+.idea/
+.vscode/
+*.iml
+Thumbs.db

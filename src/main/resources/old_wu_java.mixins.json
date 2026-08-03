@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "functionhook.oldwu.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "BattleCollisionMixin",
+    "CatMixin",
+    "MobMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

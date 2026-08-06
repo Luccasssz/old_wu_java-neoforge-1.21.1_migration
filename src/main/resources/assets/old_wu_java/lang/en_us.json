@@ -1,7 +1,8 @@
 {
 	"entity.old_wu_java.maodie": "Maodie",
-	"entity.old_wu_java.paper_roll": "Paper Tube",
-	"item.old_wu_java.paper_roll": "Paper Tube",
+	"entity.old_wu_java.paper_roll": "Paper Roll",
+	"item.old_wu_java.paper_roll": "Paper Roll",
+	"item.old_wu_java.dagoujiao": "Big Dog Bark",
 	"itemGroup.old_wu_java.old_wu": "Old Wu",
 	"subtitle.old_wu_java.ha": "Hiss",
 	"subtitle.old_wu_java.laowu": "Old Wu",

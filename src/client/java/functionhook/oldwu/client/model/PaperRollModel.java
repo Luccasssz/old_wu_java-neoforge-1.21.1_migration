@@ -15,7 +15,7 @@ import net.minecraft.client.model.geom.builders.PartDefinition;
 import functionhook.oldwu.entity.PaperRoll;
 
 /**
- * 纸筒实体模型。几何与源模组一致：模型居中，长轴沿 Z 轴，供渲染器按 yaw/pitch
+ * 纸卷实体模型。几何与源模组一致：模型居中，长轴沿 Z 轴，供渲染器按 yaw/pitch
  * 直接对齐飞行方向。
  */
 public class PaperRollModel extends EntityModel<PaperRoll> {

@@ -5,7 +5,8 @@
   "client": [
     "LivingEntityRendererMixin",
     "CatRendererMixin",
-    "EntityRendererMixin"
+    "EntityRendererMixin",
+    "CatCollarLayerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

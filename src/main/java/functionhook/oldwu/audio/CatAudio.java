@@ -28,7 +28,15 @@ public final class CatAudio {
 	}
 
 	public static void playStateSound(Cat cat, CatState state) {
-		SoundEvent sound = pickStateSound(cat, state);
+		playSound(cat, pickStateSound(cat, state));
+	}
+
+	/** Maodie attack and paper-tube sound, using the existing ha subtitle series. */
+	public static void playHaSound(Cat cat) {
+		playSound(cat, pickRandom(cat, ModSounds.haSeries()));
+	}
+
+	private static void playSound(Cat cat, SoundEvent sound) {
 		if (sound == null) {
 			return;
 		}

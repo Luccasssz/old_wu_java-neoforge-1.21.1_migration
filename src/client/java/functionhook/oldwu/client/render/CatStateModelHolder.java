@@ -9,6 +9,8 @@ import functionhook.oldwu.client.model.FlatCatModel;
 import functionhook.oldwu.client.model.MaodieCatModel;
 import functionhook.oldwu.client.model.RecoveryCatBabyModel;
 import functionhook.oldwu.client.model.RecoveryCatModel;
+import functionhook.oldwu.client.model.GroomingCatBabyModel;
+import functionhook.oldwu.client.model.GroomingCatModel;
 
 public interface CatStateModelHolder {
 	MaodieCatModel oldwu_getMaodieModel();
@@ -28,4 +30,8 @@ public interface CatStateModelHolder {
 	FlatCatModel oldwu_getFlatModel();
 
 	FlatCatBabyModel oldwu_getFlatBabyModel();
+
+	GroomingCatModel oldwu_getGroomingModel();
+
+	GroomingCatBabyModel oldwu_getGroomingBabyModel();
 }

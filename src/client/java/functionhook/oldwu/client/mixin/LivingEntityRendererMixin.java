@@ -60,6 +60,8 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, M extend
                 selected = baby ? holder.oldwu_getRecoveryBabyModel() : holder.oldwu_getRecoveryModel();
             } else if (state == CatState.FLAT) {
                 selected = baby ? holder.oldwu_getFlatBabyModel() : holder.oldwu_getFlatModel();
+            } else if (state == CatState.GROOMING) {
+                selected = baby ? holder.oldwu_getGroomingBabyModel() : holder.oldwu_getGroomingModel();
             }
         }
 

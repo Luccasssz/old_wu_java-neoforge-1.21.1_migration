@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
@@ -19,6 +20,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.animal.Pig;
+import net.minecraft.world.entity.animal.camel.Camel;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -72,15 +74,26 @@ public final class CatMatingLogic {
 	}
 
 	public static void tick(ServerLevel level, Cat cat) {
+		int peaceTimer = CatPartners.getBattlePeaceTimer(cat);
+		if (peaceTimer > 0) {
+			CatPartners.setBattlePeaceTimer(cat, peaceTimer - 1);
+			if (peaceTimer % 5 == 0) {
+				spawnWetParticles(level, cat);
+			}
+		}
+
+		boolean maodie = isMaodie(cat);
+		if (!maodie) {
+			MaodieLogic.removeBossBar(cat);
+		}
+
 		if (cat.isOrderedToSit()) {
 			return;
 		}
 
-		if (isMaodie(cat)) {
-			// AI/行为逻辑已由 MobMixin.isEffectiveAi 拦截；此处仅兜底清理
+		if (maodie) {
 			CatPartners.setPartner(cat, null);
-			CatPartners.setState(cat, CatState.COMMON);
-			cat.getNavigation().stop();
+			MaodieLogic.tick(level, cat);
 			return;
 		}
 
@@ -98,7 +111,33 @@ public final class CatMatingLogic {
 			return;
 		}
 
-		// dance/flat 可打断任意状态：0.5 格内被马/驴/骡/猪冲撞
+		if (CatPartners.getState(cat) == CatState.GROOMING) {
+			groomingTick(cat);
+			return;
+		}
+
+		if (CatPartners.getBattlePeaceTimer(cat) > 0) {
+			CatPartners.getPartner(cat).ifPresent(partnerId -> {
+				if (cat.level() instanceof ServerLevel serverLevel
+						&& serverLevel.getEntity(partnerId) instanceof Cat other) {
+					CatPartners.setPartner(other, null);
+					if (CatPartners.getState(other) == CatState.ANGRY
+							|| CatPartners.getState(other) == CatState.PAIRING
+							|| CatPartners.getState(other) == CatState.BATTLE) {
+						transitionTo(other, CatState.COMMON);
+					}
+				}
+			});
+			CatPartners.setPartner(cat, null);
+			if (CatPartners.getState(cat) == CatState.ANGRY
+					|| CatPartners.getState(cat) == CatState.PAIRING
+					|| CatPartners.getState(cat) == CatState.BATTLE) {
+				transitionTo(cat, CatState.COMMON);
+			}
+			return;
+		}
+
+		// dance/flat 可打断任意状态：0.5 格内被马/驴/骡/猪/骆驼冲撞
 		if (tryDanceOrFlat(cat)) {
 			return;
 		}
@@ -122,6 +161,9 @@ public final class CatMatingLogic {
 
 		Optional<UUID> partnerId = CatPartners.getPartner(cat);
 		if (partnerId.isPresent()) {
+			if (retargetToMaodie(cat, partnerId.get())) {
+				return;
+			}
 			LivingEntity partner = level.getEntity(partnerId.get()) instanceof LivingEntity living ? living : null;
 			if (partner == null) {
 				CatPartners.setPartner(cat, null);
@@ -159,6 +201,10 @@ public final class CatMatingLogic {
 		List<AbstractHorse> horses = cat.level().getEntitiesOfClass(AbstractHorse.class, range, horse -> !horse.isRemoved());
 		if (!horses.isEmpty()) {
 			return horses.get(0);
+		}
+		List<Camel> camels = cat.level().getEntitiesOfClass(Camel.class, range, camel -> !camel.isRemoved());
+		if (!camels.isEmpty()) {
+			return camels.get(0);
 		}
 		List<Pig> pigs = cat.level().getEntitiesOfClass(Pig.class, range, pig -> !pig.isRemoved());
 		return pigs.isEmpty() ? null : pigs.get(0);
@@ -292,6 +338,13 @@ public final class CatMatingLogic {
 		if (!(partner instanceof Cat other)) {
 			return;
 		}
+		if (CatPartners.getBattlePeaceTimer(cat) > 0 || CatPartners.getBattlePeaceTimer(other) > 0) {
+			CatPartners.setPartner(cat, null);
+			CatPartners.setPartner(other, null);
+			transitionTo(cat, CatState.COMMON);
+			transitionTo(other, CatState.COMMON);
+			return;
+		}
 
 		transitionTo(cat, CatState.BATTLE);
 		transitionTo(other, CatState.BATTLE);
@@ -325,7 +378,7 @@ public final class CatMatingLogic {
 		int cooldown = CatPartners.getAttackCooldown(cat);
 		if (cooldown > 0) {
 			CatPartners.setAttackCooldown(cat, cooldown - 1);
-		} else {
+		} else if (distanceSqr <= STOP_DISTANCE_SQR) {
 			// 1.21.1 的 minecraft:generic 不再带 NO_KNOCKBACK；使用模组专用伤害类型，
 			// 并在伤害结算后恢复原速度，避免受伤同步仍给躺地缠斗的猫带来位移。
 			hurtWithoutKnockback(level, partner, ATTACK_DAMAGE);
@@ -335,7 +388,7 @@ public final class CatMatingLogic {
 
 		// 战斗中任意一方生命 ≤1，双方同时进入回血（回血结束后继续战斗）
 		if (cat.getHealth() <= RECOVERY_HEALTH || partner.getHealth() <= RECOVERY_HEALTH) {
-			if (partner instanceof Cat other) {
+			if (partner instanceof Cat other && !isMaodie(other)) {
 				startRecoveryPair(cat, other);
 			} else {
 				startRecovery(cat);
@@ -494,6 +547,10 @@ public final class CatMatingLogic {
 	}
 
 	private static Optional<Cat> findCandidate(Cat cat) {
+		Cat maodie = findNearbyMaodie(cat);
+		if (maodie != null) {
+			return Optional.of(maodie);
+		}
 		List<Cat> candidates = cat.level().getEntitiesOfClass(
 			Cat.class,
 			new AABB(cat.blockPosition()).inflate(ATTRACT_RANGE),
@@ -506,6 +563,43 @@ public final class CatMatingLogic {
 		return Optional.of(candidates.get(cat.getRandom().nextInt(candidates.size())));
 	}
 
+	private static boolean retargetToMaodie(Cat cat, UUID currentPartnerId) {
+		Cat maodie = findNearbyMaodie(cat);
+		if (maodie == null || maodie.getUUID().equals(currentPartnerId)) {
+			return false;
+		}
+		if (cat.level() instanceof ServerLevel serverLevel
+				&& serverLevel.getEntity(currentPartnerId) instanceof Cat other) {
+			CatPartners.setPartner(other, null);
+			transitionTo(other, CatState.COMMON);
+		}
+		CatPartners.setPartner(cat, null);
+		chaseAndPair(cat, maodie);
+		return true;
+	}
+
+	private static Cat findNearbyMaodie(Cat cat) {
+		List<Cat> maodies = cat.level().getEntitiesOfClass(Cat.class,
+			new AABB(cat.blockPosition()).inflate(ATTRACT_RANGE),
+			candidate -> candidate != cat && isMaodie(candidate) && !candidate.isRemoved());
+		return maodies.isEmpty() ? null : maodies.get(cat.getRandom().nextInt(maodies.size()));
+	}
+
+	private static void chaseAndPair(Cat cat, Cat target) {
+		transitionTo(cat, CatState.ANGRY);
+		if (cat.distanceToSqr(target) > STOP_DISTANCE_SQR) {
+			cat.getNavigation().moveTo(target, 1.0);
+		} else {
+			cat.getNavigation().stop();
+			CatPartners.setPartner(cat, target.getUUID());
+			CatPartners.setPartner(target, cat.getUUID());
+			CatPartners.setPairingTimer(cat, PAIRING_DELAY_TICKS);
+			CatPartners.setPairingTimer(target, PAIRING_DELAY_TICKS);
+			transitionTo(cat, CatState.PAIRING);
+			transitionTo(target, CatState.PAIRING);
+		}
+	}
+
 	/**
 	 * 状态切换；仅在状态确实变化时触发音频并返回 true。
 	 */
@@ -516,5 +610,22 @@ public final class CatMatingLogic {
 			return true;
 		}
 		return false;
+	}
+
+	private static void groomingTick(Cat cat) {
+		cat.getNavigation().stop();
+		int timer = CatPartners.getGroomingTimer(cat);
+		if (timer > 0) {
+			CatPartners.setGroomingTimer(cat, timer - 1);
+		} else {
+			transitionTo(cat, CatState.COMMON);
+		}
+	}
+
+	private static void spawnWetParticles(ServerLevel level, Cat cat) {
+		level.sendParticles(ParticleTypes.FALLING_WATER, cat.getX(),
+			cat.getY() + cat.getBbHeight() * 0.75, cat.getZ(), 10,
+			cat.getBbWidth() * 0.4, cat.getBbHeight() * 0.25,
+			cat.getBbWidth() * 0.4, 0.02);
 	}
 }

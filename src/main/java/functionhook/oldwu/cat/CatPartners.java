@@ -17,6 +17,12 @@ public final class CatPartners {
 	public static final EntityDataAccessor<Integer> PAIRING_TIMER = SynchedEntityData.defineId(Cat.class, EntityDataSerializers.INT);
 	public static final EntityDataAccessor<Integer> DANCE_MODEL_INDEX = SynchedEntityData.defineId(Cat.class, EntityDataSerializers.INT);
 	public static final EntityDataAccessor<Integer> DANCE_TIMER = SynchedEntityData.defineId(Cat.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Integer> MAODIE_HAQI_TIMER = SynchedEntityData.defineId(Cat.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Integer> MAODIE_RAGE_COOLDOWN = SynchedEntityData.defineId(Cat.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Integer> MAODIE_ANIM_TICK = SynchedEntityData.defineId(Cat.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Integer> MAODIE_NORMAL_FIRE_COOLDOWN = SynchedEntityData.defineId(Cat.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Integer> GROOMING_TIMER = SynchedEntityData.defineId(Cat.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Integer> BATTLE_PEACE_TIMER = SynchedEntityData.defineId(Cat.class, EntityDataSerializers.INT);
 
 	private CatPartners() {
 	}
@@ -43,9 +49,59 @@ public final class CatPartners {
 	 * 在构造时按已注册数量固定，延迟注册会越界）。
 	 */
 	public static void initAccessors() {
-		if (PARTNER_UUID == null || STATE == null || ATTACK_COOLDOWN == null || FLAT_TIMER == null || PAIRING_TIMER == null) {
+		if (PARTNER_UUID == null || STATE == null || ATTACK_COOLDOWN == null || FLAT_TIMER == null || PAIRING_TIMER == null
+			|| DANCE_MODEL_INDEX == null || DANCE_TIMER == null || MAODIE_HAQI_TIMER == null || MAODIE_RAGE_COOLDOWN == null
+			|| MAODIE_ANIM_TICK == null || MAODIE_NORMAL_FIRE_COOLDOWN == null || GROOMING_TIMER == null || BATTLE_PEACE_TIMER == null) {
 			throw new IllegalStateException("Cat data accessors not initialized");
 		}
+	}
+
+	public static int getMaodieHaqiTimer(Cat cat) {
+		return cat.getEntityData().get(MAODIE_HAQI_TIMER);
+	}
+
+	public static void setMaodieHaqiTimer(Cat cat, int value) {
+		cat.getEntityData().set(MAODIE_HAQI_TIMER, value);
+	}
+
+	public static int getMaodieRageCooldown(Cat cat) {
+		return cat.getEntityData().get(MAODIE_RAGE_COOLDOWN);
+	}
+
+	public static void setMaodieRageCooldown(Cat cat, int value) {
+		cat.getEntityData().set(MAODIE_RAGE_COOLDOWN, value);
+	}
+
+	public static int getMaodieAnimTick(Cat cat) {
+		return cat.getEntityData().get(MAODIE_ANIM_TICK);
+	}
+
+	public static void setMaodieAnimTick(Cat cat, int value) {
+		cat.getEntityData().set(MAODIE_ANIM_TICK, value);
+	}
+
+	public static int getMaodieNormalFireCooldown(Cat cat) {
+		return cat.getEntityData().get(MAODIE_NORMAL_FIRE_COOLDOWN);
+	}
+
+	public static void setMaodieNormalFireCooldown(Cat cat, int value) {
+		cat.getEntityData().set(MAODIE_NORMAL_FIRE_COOLDOWN, value);
+	}
+
+	public static int getGroomingTimer(Cat cat) {
+		return cat.getEntityData().get(GROOMING_TIMER);
+	}
+
+	public static void setGroomingTimer(Cat cat, int value) {
+		cat.getEntityData().set(GROOMING_TIMER, value);
+	}
+
+	public static int getBattlePeaceTimer(Cat cat) {
+		return cat.getEntityData().get(BATTLE_PEACE_TIMER);
+	}
+
+	public static void setBattlePeaceTimer(Cat cat, int value) {
+		cat.getEntityData().set(BATTLE_PEACE_TIMER, value);
 	}
 
 	public static int getPairingTimer(Cat cat) {

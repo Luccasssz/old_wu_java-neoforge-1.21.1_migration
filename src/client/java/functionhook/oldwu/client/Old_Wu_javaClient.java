@@ -10,8 +10,13 @@ import functionhook.oldwu.client.model.FlatCatModel;
 import functionhook.oldwu.client.model.MaodieCatModel;
 import functionhook.oldwu.client.model.RecoveryCatBabyModel;
 import functionhook.oldwu.client.model.RecoveryCatModel;
+import functionhook.oldwu.client.model.GroomingCatBabyModel;
+import functionhook.oldwu.client.model.GroomingCatModel;
+import functionhook.oldwu.client.model.PaperRollModel;
 import functionhook.oldwu.client.particle.MaomaoParticle;
 import functionhook.oldwu.client.particle.RecoveryParticle;
+import functionhook.oldwu.client.render.PaperRollRenderer;
+import functionhook.oldwu.entity.ModEntityTypes;
 import functionhook.oldwu.particle.ModParticles;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -34,6 +39,13 @@ public final class Old_Wu_javaClient {
         event.registerLayerDefinition(RecoveryCatBabyModel.LAYER_LOCATION, RecoveryCatBabyModel::createBodyLayer);
         event.registerLayerDefinition(FlatCatModel.LAYER_LOCATION, FlatCatModel::createBodyLayer);
         event.registerLayerDefinition(FlatCatBabyModel.LAYER_LOCATION, FlatCatBabyModel::createBodyLayer);
+        event.registerLayerDefinition(GroomingCatModel.LAYER_LOCATION, GroomingCatModel::createBodyLayer);
+        event.registerLayerDefinition(PaperRollModel.LAYER_LOCATION, PaperRollModel::createBodyLayer);
+    }
+
+    @SubscribeEvent
+    public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        event.registerEntityRenderer(ModEntityTypes.PAPER_ROLL.get(), PaperRollRenderer::new);
     }
 
     @SubscribeEvent

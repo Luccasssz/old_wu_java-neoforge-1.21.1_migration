@@ -1,6 +1,8 @@
 package functionhook.oldwu;
 
 import functionhook.oldwu.cat.CatMatingLogic;
+import functionhook.oldwu.entity.ModEntityTypes;
+import functionhook.oldwu.item.ModItems;
 import functionhook.oldwu.particle.ModParticles;
 import functionhook.oldwu.sound.ModSounds;
 import net.minecraft.sounds.SoundEvents;
@@ -26,6 +28,9 @@ public final class Old_Wu_java {
     public Old_Wu_java(IEventBus modEventBus) {
         ModParticles.PARTICLE_TYPES.register(modEventBus);
         ModSounds.SOUND_EVENTS.register(modEventBus);
+        ModEntityTypes.ENTITY_TYPES.register(modEventBus);
+        ModItems.ITEMS.register(modEventBus);
+        ModItems.CREATIVE_MODE_TABS.register(modEventBus);
         NeoForge.EVENT_BUS.addListener(Old_Wu_java::onEntityInteract);
         NeoForge.EVENT_BUS.addListener(Old_Wu_java::onEntityInteractSpecific);
         LOGGER.info("Loaded Old Wu Java NeoForge port");

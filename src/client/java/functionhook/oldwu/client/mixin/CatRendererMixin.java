@@ -2,6 +2,7 @@ package functionhook.oldwu.client.mixin;
 
 import functionhook.oldwu.Old_Wu_java;
 import functionhook.oldwu.cat.CatMatingLogic;
+import functionhook.oldwu.cat.CatPartners;
 import functionhook.oldwu.client.model.AngryCatBabyModel;
 import functionhook.oldwu.client.model.AngryCatModel;
 import functionhook.oldwu.client.model.BattleCatBabyModel;
@@ -11,6 +12,8 @@ import functionhook.oldwu.client.model.FlatCatModel;
 import functionhook.oldwu.client.model.MaodieCatModel;
 import functionhook.oldwu.client.model.RecoveryCatBabyModel;
 import functionhook.oldwu.client.model.RecoveryCatModel;
+import functionhook.oldwu.client.model.GroomingCatBabyModel;
+import functionhook.oldwu.client.model.GroomingCatModel;
 import functionhook.oldwu.client.render.CatStateModelHolder;
 import net.minecraft.client.renderer.entity.CatRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -43,6 +46,10 @@ public abstract class CatRendererMixin implements CatStateModelHolder {
     private FlatCatModel oldwuFlatModel;
     @Unique
     private FlatCatBabyModel oldwuFlatBabyModel;
+    @Unique
+    private GroomingCatModel oldwuGroomingModel;
+    @Unique
+    private GroomingCatBabyModel oldwuGroomingBabyModel;
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void oldwu_bakeModels(EntityRendererProvider.Context context, CallbackInfo ci) {
@@ -55,12 +62,17 @@ public abstract class CatRendererMixin implements CatStateModelHolder {
         this.oldwuRecoveryBabyModel = new RecoveryCatBabyModel(context.bakeLayer(RecoveryCatBabyModel.LAYER_LOCATION));
         this.oldwuFlatModel = new FlatCatModel(context.bakeLayer(FlatCatModel.LAYER_LOCATION));
         this.oldwuFlatBabyModel = new FlatCatBabyModel(context.bakeLayer(FlatCatBabyModel.LAYER_LOCATION));
+        this.oldwuGroomingModel = new GroomingCatModel(context.bakeLayer(GroomingCatModel.LAYER_LOCATION));
+        this.oldwuGroomingBabyModel = new GroomingCatBabyModel(context.bakeLayer(GroomingCatModel.LAYER_LOCATION));
     }
 
     @Inject(method = "getTextureLocation", at = @At("HEAD"), cancellable = true)
     private void oldwu_maodieTexture(Cat entity, CallbackInfoReturnable<ResourceLocation> cir) {
         if (CatMatingLogic.isMaodie(entity)) {
-            cir.setReturnValue(ResourceLocation.fromNamespaceAndPath(Old_Wu_java.MOD_ID, "textures/entity/maodie.png"));
+            String texture = CatPartners.getMaodieHaqiTimer(entity) > 0
+                    ? "textures/entity/haqi.png"
+                    : "textures/entity/maodie.png";
+            cir.setReturnValue(ResourceLocation.fromNamespaceAndPath(Old_Wu_java.MOD_ID, texture));
         }
     }
 
@@ -82,4 +94,8 @@ public abstract class CatRendererMixin implements CatStateModelHolder {
     public FlatCatModel oldwu_getFlatModel() { return oldwuFlatModel; }
     @Override
     public FlatCatBabyModel oldwu_getFlatBabyModel() { return oldwuFlatBabyModel; }
+    @Override
+    public GroomingCatModel oldwu_getGroomingModel() { return oldwuGroomingModel; }
+    @Override
+    public GroomingCatBabyModel oldwu_getGroomingBabyModel() { return oldwuGroomingBabyModel; }
 }

@@ -12,6 +12,10 @@ import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.world.entity.animal.Cat;
 
 import functionhook.oldwu.Old_Wu_java;
+import functionhook.oldwu.cat.CatMatingLogic;
+import functionhook.oldwu.cat.CatPartners;
+import functionhook.oldwu.cat.MaodieLogic;
+import functionhook.oldwu.client.animation.MaodieAnimations;
 
 /**
  * 被命名为 "maodie" 或 "耄耋" 的猫使用的静态模型（Blockbench 导出后适配 26.2 渲染 API，32×32）。
@@ -31,6 +35,11 @@ public class MaodieCatModel extends OldWuCatModel {
 			"bone",
 			CubeListBuilder.create().texOffs(0, 25).addBox(-2.0F, -5.0F, 4.0F, 2.0F, 5.0F, 2.0F, new CubeDeformation(0.0F)),
 			PartPose.offsetAndRotation(0.0F, 24.0F, 0.0F, -3.1416F, 0.0F, 3.1416F)
+		);
+		bone.addOrReplaceChild(
+			"bone2",
+			CubeListBuilder.create().texOffs(0, 25).addBox(-1.0F, -5.0F, -1.0F, 2.0F, 5.0F, 2.0F, new CubeDeformation(0.0F)),
+			PartPose.offset(-1.0F, 0.0F, 5.0F)
 		);
 
 		bone.addOrReplaceChild(
@@ -81,8 +90,8 @@ public class MaodieCatModel extends OldWuCatModel {
 		PartDefinition handR = bone.addOrReplaceChild("handR", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 		handR.addOrReplaceChild(
 			"cube_r4",
-			CubeListBuilder.create().texOffs(20, 14).addBox(-1.0F, -3.0F, -1.0F, 1.0F, 3.0F, 2.0F, new CubeDeformation(0.0F)),
-			PartPose.offsetAndRotation(3.0F, -5.0F, 2.0F, 0.0F, 0.0F, -0.2182F)
+			CubeListBuilder.create().texOffs(14, 13).addBox(0.0F, -3.0F, -1.0F, 1.0F, 3.0F, 2.0F, new CubeDeformation(0.0F)),
+			PartPose.offsetAndRotation(-3.0F, -5.0F, 2.0F, 0.0F, 0.0F, 0.2182F)
 		);
 		handR.addOrReplaceChild(
 			"cube_r5",
@@ -93,8 +102,8 @@ public class MaodieCatModel extends OldWuCatModel {
 		PartDefinition handL = bone.addOrReplaceChild("handL", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 		handL.addOrReplaceChild(
 			"cube_r6",
-			CubeListBuilder.create().texOffs(14, 13).addBox(0.0F, -3.0F, -1.0F, 1.0F, 3.0F, 2.0F, new CubeDeformation(0.0F)),
-			PartPose.offsetAndRotation(-3.0F, -5.0F, 2.0F, 0.0F, 0.0F, 0.2182F)
+			CubeListBuilder.create().texOffs(20, 14).addBox(-1.0F, -3.0F, -1.0F, 1.0F, 3.0F, 2.0F, new CubeDeformation(0.0F)),
+			PartPose.offsetAndRotation(3.0F, -5.0F, 2.0F, 0.0F, 0.0F, -0.2182F)
 		);
 		handL.addOrReplaceChild(
 			"cube_r7",
@@ -114,5 +123,16 @@ public class MaodieCatModel extends OldWuCatModel {
 	@Override
 	public void setupAnim(Cat cat, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		oldwuResetPose();
+		if (!CatMatingLogic.isMaodie(cat)) {
+			return;
+		}
+		if (cat.getHealth() <= MaodieLogic.RAGE_THRESHOLD) {
+			oldwuAnimate(MaodieAnimations.ROLLING, ageInTicks);
+		}
+		int animTick = CatPartners.getMaodieAnimTick(cat);
+		float elapsed = ageInTicks - animTick;
+		if (animTick > 0 && elapsed >= 0.0F && elapsed < MaodieAnimations.ATTACK_DURATION_TICKS) {
+			oldwuAnimate(MaodieAnimations.MAODIE_ATTACK, elapsed);
+		}
 	}
 }

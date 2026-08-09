@@ -5,6 +5,7 @@ import functionhook.oldwu.entity.ModEntityTypes;
 import functionhook.oldwu.item.ModItems;
 import functionhook.oldwu.particle.ModParticles;
 import functionhook.oldwu.sound.ModSounds;
+import functionhook.oldwu.attribute.ModAttributes;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
@@ -31,6 +32,7 @@ public final class Old_Wu_java {
         ModEntityTypes.ENTITY_TYPES.register(modEventBus);
         ModItems.ITEMS.register(modEventBus);
         ModItems.CREATIVE_MODE_TABS.register(modEventBus);
+        ModAttributes.ATTRIBUTES.register(modEventBus);
         NeoForge.EVENT_BUS.addListener(Old_Wu_java::onEntityInteract);
         NeoForge.EVENT_BUS.addListener(Old_Wu_java::onEntityInteractSpecific);
         LOGGER.info("Loaded Old Wu Java NeoForge port");

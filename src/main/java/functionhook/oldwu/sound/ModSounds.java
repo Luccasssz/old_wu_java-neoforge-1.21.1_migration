@@ -45,6 +45,19 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> RECOVERY_1 = registerSound("recovery_1");
     public static final DeferredHolder<SoundEvent, SoundEvent> RECOVERY_2 = registerSound("recovery_2");
 
+    public static final DeferredHolder<SoundEvent, SoundEvent> DAGOU_1 = registerSound("dagou_1");
+    public static final DeferredHolder<SoundEvent, SoundEvent> DAGOU_2 = registerSound("dagou_2");
+    public static final DeferredHolder<SoundEvent, SoundEvent> DAGOU_3 = registerSound("dagou_3");
+    public static final DeferredHolder<SoundEvent, SoundEvent> DAGOU_4 = registerSound("dagou_4");
+    public static final DeferredHolder<SoundEvent, SoundEvent> DAGOU_5 = registerSound("dagou_5");
+    public static final DeferredHolder<SoundEvent, SoundEvent> DAGOU_6 = registerSound("dagou_6");
+    public static final DeferredHolder<SoundEvent, SoundEvent> DAGOU_7 = registerSound("dagou_7");
+    public static final DeferredHolder<SoundEvent, SoundEvent> DAGOU_8 = registerSound("dagou_8");
+    public static final DeferredHolder<SoundEvent, SoundEvent> DAGOU_9 = registerSound("dagou_9");
+    public static final DeferredHolder<SoundEvent, SoundEvent> DAGOU_10 = registerSound("dagou_10");
+    public static final DeferredHolder<SoundEvent, SoundEvent> DAGOU_11_RE = registerSound("dagou_11_re");
+    public static final DeferredHolder<SoundEvent, SoundEvent> DOG_LAUNCH = registerSound("dog_launch");
+
     private ModSounds() {}
 
     public static SoundEvent[] laowuSeries() {
@@ -60,6 +73,11 @@ public final class ModSounds {
 
     public static SoundEvent[] recoverySeries() {
         return values(RECOVERY_1, RECOVERY_2);
+    }
+
+    public static SoundEvent[] dagouSeries() {
+        return values(DAGOU_1, DAGOU_2, DAGOU_3, DAGOU_4, DAGOU_5, DAGOU_6,
+                DAGOU_7, DAGOU_8, DAGOU_9, DAGOU_10, DAGOU_11_RE, DOG_LAUNCH);
     }
 
     @SafeVarargs

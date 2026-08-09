@@ -1,6 +1,6 @@
 # Old Wu Java — NeoForge 1.21.1
 
-这是 [FunctionHookTJU/old_wu_java-template-26.2](https://github.com/FunctionHookTJU/old_wu_java-template-26.2) 1.4.1 标签的 NeoForge 移植版。
+这是 [FunctionHookTJU/old_wu_java-template-26.2](https://github.com/FunctionHookTJU/old_wu_java-template-26.2) 1.5.1 标签的 NeoForge 移植版。
 
 ## 运行环境
 
@@ -19,7 +19,15 @@
 - 马、驴、骡、骆驼或猪在 0.5 格内会随机触发 dance 或 flat；dance 持续 100 tick，每 5 tick 随机切换状态模型并跳跃。
 - 名字精确为 `maodie` 或 `耄耋` 的猫进入耄耋 Boss 行为：325 点生命、1.5 倍尺寸、目标索敌、近战/纸卷攻击、狂暴阶段、粒子圆环、haqi 贴图与 Boss 血条；之后改成其他名字只移除 Boss 血条，仍保留 325 最大生命与 1.5 缩放基值。
 - 纸卷可在创造标签中获取并蓄力投掷；命中会造成伤害并产生小型生物爆炸，击败耄耋会掉落纸卷。
+- 大狗叫（dagoujiao）只能喂食已驯服且属于自己的狼：掉血时回血 10 点；满血时第 n 次喂食提升血量上限 n 点（最多 64 次，通过无上限自定义属性 `extra_max_health` 突破原版 1024 上限，累计可达 2100 最大生命）。
+- 喂满 64 次后狼获得永久力量 IV 与生命恢复 III，并在拥有攻击目标时自动消耗主人背包中的大狗叫蓄力（共 12 段，依序播放 dagou 系列音效）；第 12 段触发监守者式音波攻击（67 点伤害）。
+- 手持或背包中有大狗叫并看向自己的狼时，屏幕中央偏左显示喂食进度与蓄力 HUD；旧版（1.5.0）存档中的喂食次数会自动迁移。
+- 驯服的猫不再主动进入配对/战斗状态；只有未驯服的野猫会发起配对/战斗。
 - 水瓶溅射附近的猫会进入舔毛状态并获得 600 tick 的战斗和平期；使用望远镜分两次观察耄耋、或击败耄耋可完成对应进度。
+
+## 第三方资源
+
+- `dog_launch.ogg`（第 12 段蓄力音效）取自 [ikunkk02-afk/Big-Dog-Bark](https://github.com/ikunkk02-afk/Big-Dog-Bark)（Minecraft 1.21.1 Fabric 模组「大狗叫」），以 MIT 许可发布，版权归寿云所有。
 
 ## 许可
 

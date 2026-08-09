@@ -1,5 +1,6 @@
 {
 	"entity.old_wu_java.maodie": "Maodie",
+	"attribute.old_wu_java.extra_max_health": "Extra Max Health",
 	"entity.old_wu_java.paper_roll": "Paper Roll",
 	"item.old_wu_java.paper_roll": "Paper Roll",
 	"item.old_wu_java.dagoujiao": "Big Dog Bark",
@@ -7,6 +8,7 @@
 	"subtitle.old_wu_java.ha": "Hiss",
 	"subtitle.old_wu_java.laowu": "Old Wu",
 	"subtitle.old_wu_java.recovery": "Chewing gum",
+	"subtitle.old_wu_java.dagou": "Big dog",
 	"advancements.old_wu_java.spot_check_camera.title": "Spot Check Camera",
 	"advancements.old_wu_java.spot_check_camera.description": "Observe Maodie through a spyglass twice",
 	"advancements.old_wu_java.old_friend_gone.title": "The Old Friend Has Gone",

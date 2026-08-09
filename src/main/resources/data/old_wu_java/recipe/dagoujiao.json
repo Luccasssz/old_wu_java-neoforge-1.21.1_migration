@@ -2,8 +2,12 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "s": "minecraft:string",
-    "c": "#minecraft:wool_carpets"
+    "s": {
+      "item": "minecraft:string"
+    },
+    "c": {
+      "tag": "minecraft:wool_carpets"
+    }
   },
   "pattern": [
     "scs"

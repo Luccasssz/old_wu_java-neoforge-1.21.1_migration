@@ -156,6 +156,10 @@ public final class MaodieLogic {
         }
     }
 
+    /**
+     * 目标选择：优先最近且**视线可见**的玩家；无可见玩家时选择最近且**视线可见**的生物。
+     * 耄耋只有“看到”可攻击实体才会发起攻击，不再无条件索敌。
+     */
     private static LivingEntity findTarget(Cat cat) {
         Player player = findNearestPlayer(cat);
         return player != null ? player : findNearestLiving(cat);
@@ -165,6 +169,8 @@ public final class MaodieLogic {
         List<Player> players = cat.level().getEntitiesOfClass(Player.class,
                 new AABB(cat.blockPosition()).inflate(TARGET_RANGE), player -> player.isAlive()
                         && !player.isCreative() && !player.isSpectator()
+                        // 仅索敌视线可见的实体
+                        && cat.hasLineOfSight(player)
                         && cat.distanceToSqr(player) <= TARGET_RANGE_SQR);
         return players.stream().min(Comparator.comparingDouble(cat::distanceToSqr)).orElse(null);
     }
@@ -174,6 +180,8 @@ public final class MaodieLogic {
                 new AABB(cat.blockPosition()).inflate(TARGET_RANGE), entity -> entity != cat
                         && entity.isAlive() && !(entity instanceof ArmorStand) && !(entity instanceof Player)
                         && !(entity instanceof Cat other && CatMatingLogic.isMaodie(other))
+                        // 仅索敌视线可见的实体
+                        && cat.hasLineOfSight(entity)
                         && cat.distanceToSqr(entity) <= TARGET_RANGE_SQR);
         return entities.stream().min(Comparator.comparingDouble(cat::distanceToSqr)).orElse(null);
     }

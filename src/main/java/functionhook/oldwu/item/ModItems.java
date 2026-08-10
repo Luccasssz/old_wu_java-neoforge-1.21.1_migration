@@ -1,6 +1,7 @@
 package functionhook.oldwu.item;
 
 import functionhook.oldwu.Old_Wu_java;
+import functionhook.oldwu.block.ModBlocks;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -29,6 +30,7 @@ public final class ModItems {
                     .displayItems((parameters, output) -> {
                         output.accept(PAPER_ROLL.get());
                         output.accept(DAGOUJIAO.get());
+                        output.accept(ModBlocks.MIRROR_ITEM.get());
                     })
                     .build());
 

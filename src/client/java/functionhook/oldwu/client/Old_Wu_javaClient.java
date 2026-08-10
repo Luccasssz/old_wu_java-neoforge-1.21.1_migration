@@ -12,6 +12,8 @@ import functionhook.oldwu.client.model.RecoveryCatBabyModel;
 import functionhook.oldwu.client.model.RecoveryCatModel;
 import functionhook.oldwu.client.model.GroomingCatBabyModel;
 import functionhook.oldwu.client.model.GroomingCatModel;
+import functionhook.oldwu.client.model.HitGroundCatBabyModel;
+import functionhook.oldwu.client.model.HitGroundCatModel;
 import functionhook.oldwu.client.model.PaperRollModel;
 import functionhook.oldwu.client.particle.MaomaoParticle;
 import functionhook.oldwu.client.particle.RecoveryParticle;
@@ -40,6 +42,8 @@ public final class Old_Wu_javaClient {
         event.registerLayerDefinition(FlatCatModel.LAYER_LOCATION, FlatCatModel::createBodyLayer);
         event.registerLayerDefinition(FlatCatBabyModel.LAYER_LOCATION, FlatCatBabyModel::createBodyLayer);
         event.registerLayerDefinition(GroomingCatModel.LAYER_LOCATION, GroomingCatModel::createBodyLayer);
+        event.registerLayerDefinition(HitGroundCatModel.LAYER_LOCATION, HitGroundCatModel::createBodyLayer);
+        event.registerLayerDefinition(HitGroundCatBabyModel.LAYER_LOCATION, HitGroundCatBabyModel::createBodyLayer);
         event.registerLayerDefinition(PaperRollModel.LAYER_LOCATION, PaperRollModel::createBodyLayer);
     }
 

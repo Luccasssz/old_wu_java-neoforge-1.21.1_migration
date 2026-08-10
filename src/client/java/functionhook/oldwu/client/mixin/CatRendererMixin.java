@@ -14,6 +14,8 @@ import functionhook.oldwu.client.model.RecoveryCatBabyModel;
 import functionhook.oldwu.client.model.RecoveryCatModel;
 import functionhook.oldwu.client.model.GroomingCatBabyModel;
 import functionhook.oldwu.client.model.GroomingCatModel;
+import functionhook.oldwu.client.model.HitGroundCatBabyModel;
+import functionhook.oldwu.client.model.HitGroundCatModel;
 import functionhook.oldwu.client.render.CatStateModelHolder;
 import net.minecraft.client.renderer.entity.CatRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -50,6 +52,10 @@ public abstract class CatRendererMixin implements CatStateModelHolder {
     private GroomingCatModel oldwuGroomingModel;
     @Unique
     private GroomingCatBabyModel oldwuGroomingBabyModel;
+    @Unique
+    private HitGroundCatModel oldwuHitGroundModel;
+    @Unique
+    private HitGroundCatBabyModel oldwuHitGroundBabyModel;
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void oldwu_bakeModels(EntityRendererProvider.Context context, CallbackInfo ci) {
@@ -64,6 +70,8 @@ public abstract class CatRendererMixin implements CatStateModelHolder {
         this.oldwuFlatBabyModel = new FlatCatBabyModel(context.bakeLayer(FlatCatBabyModel.LAYER_LOCATION));
         this.oldwuGroomingModel = new GroomingCatModel(context.bakeLayer(GroomingCatModel.LAYER_LOCATION));
         this.oldwuGroomingBabyModel = new GroomingCatBabyModel(context.bakeLayer(GroomingCatModel.LAYER_LOCATION));
+        this.oldwuHitGroundModel = new HitGroundCatModel(context.bakeLayer(HitGroundCatModel.LAYER_LOCATION));
+        this.oldwuHitGroundBabyModel = new HitGroundCatBabyModel(context.bakeLayer(HitGroundCatBabyModel.LAYER_LOCATION));
     }
 
     @Inject(method = "getTextureLocation", at = @At("HEAD"), cancellable = true)
@@ -98,4 +106,8 @@ public abstract class CatRendererMixin implements CatStateModelHolder {
     public GroomingCatModel oldwu_getGroomingModel() { return oldwuGroomingModel; }
     @Override
     public GroomingCatBabyModel oldwu_getGroomingBabyModel() { return oldwuGroomingBabyModel; }
+    @Override
+    public HitGroundCatModel oldwu_getHitGroundModel() { return oldwuHitGroundModel; }
+    @Override
+    public HitGroundCatBabyModel oldwu_getHitGroundBabyModel() { return oldwuHitGroundBabyModel; }
 }

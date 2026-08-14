@@ -135,7 +135,9 @@ public final class CatMatingLogic {
 
 		boolean maodie = isMaodie(cat);
 		if (!maodie) {
+			// 不再是被命名为 "maodie" 的猫时，清理残留的 Boss 血条，并恢复被暂存的原版 AI 目标
 			MaodieLogic.removeBossBar(cat);
+			MaodieLogic.restoreAiIfNeeded(cat);
 		}
 
 		if (cat.isOrderedToSit()) {

@@ -6,7 +6,8 @@
     "LivingEntityRendererMixin",
     "CatRendererMixin",
     "EntityRendererMixin",
-    "CatCollarLayerMixin"
+    "CatCollarLayerMixin",
+    "HudHeartMixin"
   ],
   "injectors": {
     "defaultRequire": 1

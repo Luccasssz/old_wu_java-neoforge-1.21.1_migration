@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "R": {
+      "item": "minecraft:respawn_anchor"
+    },
+    "M": {
+      "tag": "minecraft:meat"
+    },
+    "C": {
+      "item": "minecraft:clock"
+    }
+  },
+  "pattern": [
+    " R ",
+    "MMM",
+    "CCC"
+  ],
+  "result": {
+    "id": "old_wu_java:chunqiu_chang"
+  }
+}

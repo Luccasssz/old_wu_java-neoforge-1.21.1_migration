@@ -1,5 +1,8 @@
 package functionhook.oldwu.mixin;
 
+import java.util.Set;
+
+import functionhook.oldwu.accessor.AiGoalsHolder;
 import functionhook.oldwu.cat.CatMatingLogic;
 import functionhook.oldwu.cat.CatPartners;
 import functionhook.oldwu.cat.CatState;
@@ -12,6 +15,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -24,10 +28,36 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Cat.class)
-public abstract class CatMixin {
+public abstract class CatMixin implements AiGoalsHolder {
     /** 驯服交互前是否已驯服（用于判断本次交互是否完成驯服）。 */
     @Unique
     private boolean oldwuWasTameBeforeInteract;
+
+    /** 变身为 maodie 时暂存的原版 AI 目标（改名恢复时重新添加）。 */
+    @Unique
+    private Set<WrappedGoal> oldwuSavedAiGoals;
+    @Unique
+    private Set<WrappedGoal> oldwuSavedAiTargetGoals;
+
+    @Override
+    public Set<WrappedGoal> oldwu_getSavedAiGoals() {
+        return this.oldwuSavedAiGoals;
+    }
+
+    @Override
+    public void oldwu_setSavedAiGoals(Set<WrappedGoal> goals) {
+        this.oldwuSavedAiGoals = goals;
+    }
+
+    @Override
+    public Set<WrappedGoal> oldwu_getSavedAiTargetGoals() {
+        return this.oldwuSavedAiTargetGoals;
+    }
+
+    @Override
+    public void oldwu_setSavedAiTargetGoals(Set<WrappedGoal> goals) {
+        this.oldwuSavedAiTargetGoals = goals;
+    }
 
     @Inject(method = "<init>", at = @At("HEAD"))
     private static void oldwu_initAccessors(CallbackInfo ci) {

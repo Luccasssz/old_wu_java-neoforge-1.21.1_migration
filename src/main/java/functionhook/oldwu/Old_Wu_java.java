@@ -5,7 +5,9 @@ import functionhook.oldwu.cat.CatPartners;
 import functionhook.oldwu.cat.CatState;
 import functionhook.oldwu.cat.GoodCatLogic;
 import functionhook.oldwu.block.ModBlocks;
+import functionhook.oldwu.effect.ModEffects;
 import functionhook.oldwu.entity.ModEntityTypes;
+import functionhook.oldwu.item.GounaiDrinkTracker;
 import functionhook.oldwu.item.ModItems;
 import functionhook.oldwu.particle.ModParticles;
 import functionhook.oldwu.sound.ModSounds;
@@ -39,6 +41,8 @@ public final class Old_Wu_java {
         ModAttributes.ATTRIBUTES.register(modEventBus);
         ModBlocks.BLOCKS.register(modEventBus);
         ModBlocks.ITEMS.register(modEventBus);
+        ModEffects.MOB_EFFECTS.register(modEventBus);
+        GounaiDrinkTracker.ATTACHMENT_TYPES.register(modEventBus);
         NeoForge.EVENT_BUS.addListener(Old_Wu_java::onEntityInteract);
         NeoForge.EVENT_BUS.addListener(Old_Wu_java::onEntityInteractSpecific);
         LOGGER.info("Loaded Old Wu Java NeoForge port");
@@ -76,12 +80,9 @@ public final class Old_Wu_java {
     private static void flattenFromInteraction(PlayerInteractEvent event, Entity target) {
         Cat cat = (Cat) target;
         if (!event.getLevel().isClientSide()) {
-            // 需等本次 flat 恢复后（非 FLAT 状态）才能再次触发好猫值增加
-            boolean alreadyFlat = CatPartners.getState(cat) == CatState.FLAT;
             CatMatingLogic.enterFlat(cat);
             // 铲子压扁：坏猫/键帽 50% 概率好猫值 +1
-            if (!alreadyFlat
-                    && GoodCatLogic.getGoodValue(cat) < GoodCatLogic.BAD_THRESHOLD
+            if (GoodCatLogic.getGoodValue(cat) < GoodCatLogic.BAD_THRESHOLD
                     && cat.getRandom().nextBoolean()) {
                 GoodCatLogic.setGoodValue(cat, GoodCatLogic.getGoodValue(cat) + 1);
             }

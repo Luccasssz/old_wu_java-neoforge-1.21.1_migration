@@ -20,7 +20,7 @@ import functionhook.oldwu.effect.ModEffects;
  * 的实心心（NORMAL/中毒/凋零/冰冻/吸收）会被替换，而 CONTAINER（空槽背景心）
  * 保持原样，因此不会出现"其他生物的心也被替换"的问题。
  */
-@Mixin(targets = "net.minecraft.client.gui.Hud$HeartType")
+@Mixin(targets = "net.minecraft.client.gui.Gui$HeartType")
 public abstract class HudHeartMixin {
 	private static final ResourceLocation INFINITE_HEART = Old_Wu_java.id("hud/heart/infinite");
 
